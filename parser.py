@@ -4,7 +4,7 @@ import re
 from bs4 import BeautifulSoup
 
 GAME_FILES_DIR  = "j-archive/"
-NUMBER_OF_GAMES = 44
+NUMBER_OF_GAMES = 100
 
 def inclusive_range(start, stop, step = 1):
   """ A range() clone that includes the rightmost extreme value. """
@@ -109,8 +109,7 @@ def main():
     games.append(parse_game(f))
     f.close()
   for game in games:
-    print_game(game)
+    # print_game(game)
 
 if __name__ == "__main__":
   main()
-
