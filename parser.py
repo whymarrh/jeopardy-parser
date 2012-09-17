@@ -4,7 +4,7 @@ import re
 from bs4 import BeautifulSoup
 
 GAME_FILES_DIR  = "j-archive/"
-NUMBER_OF_GAMES = 3
+NUMBER_OF_GAMES = 4
 
 def inclusive_range(start, stop, step = 1):
   """ A range() clone that includes the rightmost extreme value. """
@@ -54,7 +54,7 @@ def parse_game(filehandle):
   for a in jeopardy_round.find_all("td", class_ = "clue"):
     try:
       questions.append(parse_clue(a, "1", categories[x_coord]))
-    except AttributeError:
+    except (AttributeError, UnicodeEncodeError):
       continue
     finally:
       x_coord = 0 if x_coord == 5 else x_coord + 1
@@ -69,7 +69,7 @@ def parse_game(filehandle):
   for a in double_jeopardy.find_all("td", class_ = "clue"):
     try:
       questions.append(parse_clue(a, "2", categories[x_coord]))
-    except AttributeError:
+    except (AttributeError, UnicodeEncodeError):
       continue
     finally:
       x_coord = 0 if x_coord == 5 else x_coord + 1
