@@ -21,7 +21,7 @@ def range_inclusive(start, stop, step = 1):
   return l
 
 def parse_clue(clue, category):
-  """ Returns a list that models a question in Jeopardy. """
+  """ Returns a list that models a clue in Jeopardy. """
   
   # using `str.decode()` in this way seems to break a
   # decent number of clues due to some sort of Unicode
@@ -35,12 +35,12 @@ def parse_clue(clue, category):
   return [category, value, clue_, answer]
 
 def parse_round(bsoup, rnd, game_id, airdate):
-  """ Parses and returns the list of questions from a whole round. """
+  """ Parses and returns the list of clues from a whole round. """
   try:
     
-    # the list of questions for this round all structured
+    # the list of clues for this round all structured
     # like so: [game_id, airdate, round, category, value, clue, answer]
-    questions = []
+    clues = []
     
     if rnd == "1":
       r = bsoup.find(id = "jeopardy_round")
@@ -53,14 +53,14 @@ def parse_round(bsoup, rnd, game_id, airdate):
       category = c.string.decode("string-escape")
       categories.append(category)
     
-    # the x_coord determines which category a question is in,
-    # because the categories come before the questions, we'll have
+    # the x_coord determines which category a clue is in,
+    # because the categories come before the clues, we'll have
     # to match them up on the fly
     x_coord = 0
     for a in r.find_all("td", class_ = "clue"):
       try:
-        question = [game_id, airdate, rnd] + parse_clue(a, categories[x_coord])
-        questions.append(question)
+        clue = [game_id, airdate, rnd] + parse_clue(a, categories[x_coord])
+        clues.append(clue)
       except (AttributeError, UnicodeEncodeError):
         # skip the whole clue if any exceptions are encountered,
         # as individual clues are not worth the trouble
@@ -73,7 +73,7 @@ def parse_round(bsoup, rnd, game_id, airdate):
         x_coord = 0 if x_coord == 5 else x_coord + 1
     
     if DEBUGGING is not False:
-      for q in questions:
+      for q in clues:
         print q
     
   except (AttributeError, UnicodeEncodeError):
@@ -94,11 +94,11 @@ def parse_game(filehandle, game_id):
   try:
     r = bsoup.find("table", class_ = "final_round")
     category = r.find("td", class_ = "category_name").get_text().decode("string-escape")
-    clue = r.find("td", class_ = "clue_text").get_text().decode("string-escape")
+    clue_ = r.find("td", class_ = "clue_text").get_text().decode("string-escape")
     answer = BeautifulSoup(r.find("div", onmouseover = True).get("onmouseover"), "lxml")
     answer = answer.find("em").get_text().decode("string-escape")
-    question = [game_id, airdate, "3", category, "nil", clue, answer]
-    if DEBUGGING is not False: print question
+    clue = [game_id, airdate, "3", category, "nil", clue_, answer]
+    if DEBUGGING is not False: print clue
   except:
     # if anything goes wrong just ignore this whole round
     pass
