@@ -4,12 +4,12 @@ import re
 from bs4 import BeautifulSoup
 
 GAME_FILES_DIR  = "j-archive/"
-NUMBER_OF_GAMES = 1
+NUMBER_OF_GAMES = 3
 
 def inclusive_range(start, stop, step = 1):
 	""" A range() clone that includes the rightmost extreme value. """
-	# http://zeta-puppis.com/2008/03/06/inclusive-range-in-python/
-	l = []
+  # http://zeta-puppis.com/2008/03/06/inclusive-range-in-python/
+  l = []
 	while start <= stop:
 		l.append(start)
 		start += step
@@ -52,8 +52,12 @@ def parse_game(filehandle):
 	# the x-coord is which category the question fall into
 	x_coord = 0
 	for a in jeopardy_round.find_all("td", class_ = "clue"):
-		questions.append(parse_clue(a, "1", categories[x_coord]))
-		x_coord = 0 if x_coord == 5 else x_coord + 1
+		try:
+			questions.append(parse_clue(a, "1", categories[x_coord]))
+		except AttributeError:
+			continue
+		finally:
+			x_coord = 0 if x_coord == 5 else x_coord + 1
 	
 	double_jeopardy = bsoup.find(id = "double_jeopardy_round")
 	# the list of categories for the double Jeopardy round of questions
@@ -63,8 +67,12 @@ def parse_game(filehandle):
 	# the x-coord is which category the question falls into
 	x_coord = 0
 	for a in double_jeopardy.find_all("td", class_ = "clue"):
-		questions.append(parse_clue(a, "2", categories[x_coord]))
-		x_coord = 0 if x_coord == 5 else x_coord + 1
+		try:
+			questions.append(parse_clue(a, "2", categories[x_coord]))
+		except AttributeError:
+			continue
+		finally:
+			x_coord = 0 if x_coord == 5 else x_coord + 1
 	
 	# final Jeopardy round
 	fj = bsoup.find("table", class_ = "final_round")
