@@ -9,7 +9,7 @@ try:
 except IndexError:
   DEBUGGING     = False
 GAME_FILES_DIR  = "j-archive/"
-NUMBER_OF_GAMES = 30
+NUMBER_OF_GAMES = 3970
 
 def range_inclusive(start, stop, step = 1):
   """ A range() clone that includes the rightmost extreme value. """
