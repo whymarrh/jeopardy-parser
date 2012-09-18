@@ -1,14 +1,18 @@
-## J! Archive Parser
+# What it is
 
-`parser.py` extracts the Jeopardy! clues from the [J! Archive][1] website.
+`parser.py` extracts Jeopardy! clues from the [J! Archive][1] website and dumps them into a SQLite database for use elsewhere. No particular application is intended, but a fair number of clues are skipped over when parsing. Any application requiring the complete set of clues will not find it here.
 
-## Set-up and download
+# Getting started
 
-Clone the repo: `git clone git://github.com/whymarrh/parser.git` and `cd parser`.  
-Make sure that the download script is executable: `chmod +x download.sh`.  
-Run the download script (`./download.sh`) to get all the pages.  
-Run the parser (`python parser.py`) and sit back ... this may take a bit of time.  
+Clone the repo: `git clone git://github.com/whymarrh/parser.git` and `cd parser`  
+`chmod +x download.sh`  
+`chmod +x parser.py`  
+Run the download script and parser: `./download.sh && ./parser.py`)  
 
-The running time of the parsing script (i.e. `(time python parser.py) 2>&1 | grep real`) should not be more than ~20 minutes on a decent machine. Even that is a lot, I know, but there are **a lot** of clues to go through.
+The "real" running time of the parsing script (i.e. `(time ./parser.py) 2>&1 | grep real`) should not be more than 30 minutes on a decent machine. I know even that is quite a lot, but there are **a lot** of clues to go through. The resulting database is sized at 30M.
+
+# Regarding the download
+
+The download script does not mirror the entire site; it simply gets the game pages. Also note that no media files are downloaded (e.g. pictures) and the parser does not account for media clues. The complete download of the pages (at the time of writing) is approx. 295M.
 
   [1]: http://j-archive.com/
