@@ -105,7 +105,13 @@ def parse_game(filehandle, sql, game_id):
     pass
 
 def main():
-  sql = create_db()
+  try:
+    sql = create_db()
+  except sqlite3.OperationalError:
+    # if the `clues` table alredy exists
+    print "The `clues` table already exists. Overwriting it would be a mistake."
+    exit(1)
+  
   for i in xrange(1, NUMBER_OF_GAMES + 1):
     filename = GAME_FILES_DIR + "showgame.php?game_id=" + str(i)
     f = open(filename)
