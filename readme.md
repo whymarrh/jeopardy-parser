@@ -2,7 +2,7 @@
 
 `parser.py` extracts the Jeopardy! clues from the [J! Archive][1] website.
 
-## Set-up
+## Set-up and download
 
 Clone the repo: `git clone git://github.com/whymarrh/parser.git` and `cd parser`.  
 Make sure that the download script is executable: `chmod +x download.sh`.  
