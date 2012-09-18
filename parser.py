@@ -1,4 +1,5 @@
 #!/usr/bin/python -O
+# -*- coding: utf-8 -*-
 
 import re
 from sys import argv
