@@ -6,28 +6,19 @@ from sys import argv
 from bs4 import BeautifulSoup
 
 try:
-  DEBUGGING     = argv[1]
+  DEBUGGING     = True if argv[1] == "-d" else False
 except IndexError:
   DEBUGGING     = False
 GAME_FILES_DIR  = "j-archive/"
-NUMBER_OF_GAMES = 3970
-
-def range_inclusive(start, stop, step = 1):
-  """ A range() clone that includes the rightmost extreme value. """
-  # http://zeta-puppis.com/2008/03/06/inclusive-range-in-python/
-  l = []
-  while start <= stop:
-    l.append(start)
-    start += step
-  return l
+NUMBER_OF_GAMES = 1
 
 def parse_clue(clue, category):
   """ Returns a list that models a clue in Jeopardy. """
-  
+
   # using `str.decode()` in this way seems to break a
   # decent number of clues due to some sort of Unicode
   # issue. regardless, it helps to unescape all the things
-  
+
   category = category.decode("string-escape")
   value = clue.find("td", class_ = re.compile("clue_value")).string
   clue_ = clue.find("td", class_ = "clue_text").get_text().decode("string-escape")
@@ -38,22 +29,21 @@ def parse_clue(clue, category):
 def parse_round(bsoup, rnd, game_id, airdate):
   """ Parses and returns the list of clues from a whole round. """
   try:
-    
+
     # the list of clues for this round all structured
     # like so: [game_id, airdate, round, category, value, clue, answer]
     clues = []
-    
+    # avoid reevaluating function reference
+    append = clues.append
+
     if rnd == "1":
       r = bsoup.find(id = "jeopardy_round")
     if rnd == "2":
       r = bsoup.find(id = "double_jeopardy_round")
-    
+
     # the list of categories for this round
-    categories = []
-    for c in r.find_all("td", class_ = "category_name"):
-      category = c.string.decode("string-escape")
-      categories.append(category)
-    
+    categories = [c.string.decode("string-escape") for c in r.find_all("td", class_ = "category_name")]
+
     # the x_coord determines which category a clue is in,
     # because the categories come before the clues, we'll have
     # to match them up on the fly
@@ -61,7 +51,7 @@ def parse_round(bsoup, rnd, game_id, airdate):
     for a in r.find_all("td", class_ = "clue"):
       try:
         clue = [game_id, airdate, rnd] + parse_clue(a, categories[x_coord])
-        clues.append(clue)
+        append(clue)
       except (AttributeError, UnicodeEncodeError):
         # skip the whole clue if any exceptions are encountered,
         # as individual clues are not worth the trouble
@@ -72,16 +62,16 @@ def parse_round(bsoup, rnd, game_id, airdate):
         # are 6 categories, so once we reach the end,
         # loop back to the beginning category
         x_coord = 0 if x_coord == 5 else x_coord + 1
-    
+
     if DEBUGGING is not False:
       for q in clues:
         print q
-    
+
   except (AttributeError, UnicodeEncodeError):
     # there was an error in processing
     # the categories, ignore the round
     pass
-    
+
 
 def parse_game(filehandle, game_id):
   """ Parses an entire Jeopardy game, extracting individual clues. """
@@ -90,7 +80,7 @@ def parse_game(filehandle, game_id):
 
   parse_round(bsoup, "1", game_id, airdate)
   parse_round(bsoup, "2", game_id, airdate)
-  
+
   # the final Jeopardy round
   try:
     r = bsoup.find("table", class_ = "final_round")
@@ -105,7 +95,7 @@ def parse_game(filehandle, game_id):
     pass
 
 def main():
-  for i in range_inclusive(1, NUMBER_OF_GAMES):
+  for i in xrange(1, NUMBER_OF_GAMES + 1):
     filename = GAME_FILES_DIR + "showgame.php?game_id=" + str(i)
     f = open(filename)
     parse_game(f, i)
