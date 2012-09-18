@@ -1,4 +1,5 @@
 .DS_Store
 *.db
 *.log
+*.pyo
 j-archive
