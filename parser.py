@@ -15,8 +15,9 @@ NUMBER_OF_GAMES = 3790
 SQLITE3_DB_NAME = "clues.db"
 
 def create_db():
-  a = "create table clues"
-  b = "(game integer, airdate text, round integer, category text, value text, clue text, answer text)"
+  # http://www.sqlite.org/fts3.html
+  a = "CREATE VIRTUAL TABLE clues USING fts3"
+  b = "(game, airdate, round, category, value, clue, answer)"
   
   sql = sqlite3.connect(SQLITE3_DB_NAME)
   sql.execute("%s%s" % (a, b))
