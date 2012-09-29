@@ -1,4 +1,5 @@
 #!/usr/bin/python -O
+# -*- coding: utf-8 -*-
 
 import sqlite3
 from parser import SQLITE3_DB_NAME
@@ -10,7 +11,7 @@ def main():
   # list of random game id numbers
   gids = [randint(1, 3790) for i in xrange(10)]
   # output format
-  print "GID".rjust(5), "R -> Clue text -> Answer"
+  print "GID".rjust(5), "R -> Category -> Clue text -> Answer"
   for gid in gids:
     rows = sql.execute("select * from clues where game = ?", (gid, ))
     rows = rows.fetchall()
@@ -19,7 +20,7 @@ def main():
       meta = "#%d" % gid
       print meta.rjust(5),
       row = randrange(0, len(rows))
-      print rows[row][2], "->", rows[row][5], "->", rows[row][6]
+      print rows[row][2], "->", rows[row][3], "->", rows[row][5], "->", rows[row][6]
 
 if __name__ == "__main__":
   main()
