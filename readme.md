@@ -1,4 +1,4 @@
-# What it is
+# What is this
 
 `parser.py` extracts Jeopardy! clues from the [J! Archive][1] website and dumps them into a SQLite database for use elsewhere. No particular application is intended, but a fair number of clues are skipped over when parsing. Any application requiring the complete set of clues will not find it here.
 
@@ -14,7 +14,8 @@ The "real" running time of the parsing script (i.e. `(time ./parser.py) 2>&1 | g
 
 # Regarding the initial download
 
-The download script does not mirror the entire site, it simply gets the game pages. Also note that no media files are downloaded (e.g. pictures) and the parser does not account for media clues. The complete download of the pages (at the time of writing) is approx. 295M.
+The download script does not mirror the entire site, it simply gets the game pages. Also note that no media files are downloaded (e.g. pictures) and the parser does not account for media clues. The complete download of the pages (at the time of writing) is approx. 295M, and can take up to [6.5 hours][3] (1s per page, plus a 5s wait between downloads, 3970 times).
 
   [1]: http://j-archive.com/
   [2]: http://www.sqlite.org/fts3.html
+  [3]:http://www.wolframalpha.com/input/?i=%281s+%2B+5s%29+*+3970
