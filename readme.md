@@ -2,6 +2,8 @@
 
 `parser.py` extracts Jeopardy! clues from the [J! Archive][1] website and dumps them into a SQLite database for use elsewhere. No particular application is intended, but a fair number of clues are skipped over when parsing. Any application requiring the complete set of clues will not find it here.
 
+`tests.py` spits out 10 random clues from various games. Manually comparing these clues to the J! Archive website is a simple way to verify that the clues are being matched to the proper category, round, value, game, etc.
+
 # Getting started
 
 Clone the repo: `git clone git://github.com/whymarrh/jeopardy-parser.git`  
