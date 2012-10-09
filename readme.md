@@ -14,7 +14,7 @@ The "real" running time of the parsing script (i.e. `(time ./parser.py) 2>&1 | g
 
 # Regarding the initial download
 
-The download script does not mirror the entire site, it simply gets the game pages. Also note that no media files are downloaded (e.g. pictures) and the parser does not account for media clues. The complete download of the pages (at the time of writing) is approx. 295M, and can take up to [6.5 hours][3] (1s per page, plus a 5s wait between downloads, 3970 times).
+The download script does not mirror the entire site, it simply gets the game pages. Also note that no media files are downloaded (e.g. pictures) and the parser does not account for media clues. The complete download of the pages (at the time of writing) is approx. 295M, and can take up to [6.5 hours][3] (1s per page, plus a 5s wait between downloads, 3970 times). Not for the faint at disk space.
 
   [1]: http://j-archive.com/
   [2]: http://www.sqlite.org/fts3.html
