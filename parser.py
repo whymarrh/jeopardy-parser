@@ -2,16 +2,19 @@
 # -*- coding: utf-8 -*-
 
 import re
+import os
 import sqlite3
 from sys import argv
 from bs4 import BeautifulSoup
 
 try:
+  # debugging prints out the clues instead
+  # of inserting them into a database
   DEBUGGING     = True if argv[1] == "-d" else False
 except IndexError:
   DEBUGGING     = False
 GAME_FILES_DIR  = "j-archive/"
-NUMBER_OF_GAMES = 3790
+NUMBER_OF_GAMES = len([f for f in os.listdir(GAME_FILES_DIR)])
 SQLITE3_DB_NAME = "clues.db"
 
 def create_db():
@@ -115,7 +118,10 @@ def main():
   
   for i in xrange(1, NUMBER_OF_GAMES + 1):
     filename = GAME_FILES_DIR + "showgame.php?game_id=" + str(i)
-    f = open(filename)
+    try:
+      f = open(filename)
+    except IOError:
+      continue
     parse_game(f, sql, i)
     f.close()
 
