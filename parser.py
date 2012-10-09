@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import re
-import os
 import sqlite3
 from sys import argv
 from bs4 import BeautifulSoup
@@ -14,7 +13,7 @@ try:
 except IndexError:
   DEBUGGING     = False
 GAME_FILES_DIR  = "j-archive/"
-NUMBER_OF_GAMES = len([f for f in os.listdir(GAME_FILES_DIR)])
+NUMBER_OF_GAMES = 3970
 SQLITE3_DB_NAME = "clues.db"
 
 def create_db():
