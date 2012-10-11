@@ -1,15 +1,16 @@
 #!/usr/bin/python -OO
 # -*- coding: utf-8 -*-
 
-import re
+from __future__ import with_statement
+import re, sys
 import sqlite3
-from sys import argv
 from bs4 import BeautifulSoup
 
 try:
   # debugging prints out the clues instead
-  # of inserting them into a database
-  DEBUGGING     = True if argv[1] == "-d" else False
+  # of inserting them into a database; the
+  # argparse module may be better for this
+  DEBUGGING     = True if sys.argv[1] == "-d" else False
 except IndexError:
   DEBUGGING     = False
 
@@ -18,14 +19,25 @@ NUMBER_OF_GAMES = 3970
 SQLITE3_DB_NAME = "clues.db"
 
 def create_db():
-  # http://www.sqlite.org/fts3.html
-  a = "CREATE VIRTUAL TABLE clues USING fts3"
-  b = "(game, airdate, round, category, value, clue, answer)"
-  sql = sqlite3.connect(SQLITE3_DB_NAME)
-  sql.execute("%s%s" % (a, b))
-  return sql
+  """ Creates and returns the SQLite database, None if not needed. """
+  if DEBUGGING:
+    # if we're debugging, we will not use
+    # this, so None should be fine here
+    return None
+  try:
+    # http://www.sqlite.org/fts3.html
+    a = "CREATE VIRTUAL TABLE clues USING fts3"
+    b = "(game, airdate, round, category, value, clue, answer)"
+    sql = sqlite3.connect(SQLITE3_DB_NAME)
+    sql.execute("%s%s" % (a, b))
+    return sql
+  except sqlite3.OperationalError:
+    # if the 'clues' table alredy exists
+    print "The 'clues' table already exists. Overwriting it would be a mistake."
+    sys.exit(1)
 
 def db_insert(sql, clue):
+  """ Inserts the given clue into the database. """
   sql.execute("insert into clues values(?,?,?,?,?,?,?)", tuple(clue))
   sql.commit()
 
@@ -80,7 +92,7 @@ def parse_game(filehandle, sql, game_id):
   """ Parses an entire Jeopardy! game, extracting individual clues. """
   bsoup = BeautifulSoup(filehandle, "lxml")
   # the title is in the format:
-  # J! Archive - Show #4604, aired 2004-09-16
+  # J! Archive - Show #XXXX, aired 2004-09-16
   # the last part is all that is required
   airdate = bsoup.title.get_text().split()[-1]
   # the Jeopardy! round
@@ -105,20 +117,14 @@ def parse_game(filehandle, sql, game_id):
     pass
 
 def main():
-  try:
-    sql = create_db()
-  except sqlite3.OperationalError:
-    # if the `clues` table alredy exists
-    print "The `clues` table already exists. Overwriting it would be a mistake."
-    exit(1)
+  sql = create_db()
   for i in xrange(1, NUMBER_OF_GAMES + 1):
     filename = GAME_FILES_DIR + "showgame.php?game_id=" + str(i)
     try:
-      f = open(filename)
+      with open(filename) as f:
+        parse_game(f, sql, i)
     except IOError:
       continue
-    parse_game(f, sql, i)
-    f.close()
 
 if __name__ == "__main__":
   main()
