@@ -1,5 +1,6 @@
 .DS_Store
 *.db
+*.bak
 *.log
 *.pyo
 j-archive
