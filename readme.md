@@ -8,8 +8,8 @@
 
 Clone the repo: `git clone git://github.com/whymarrh/jeopardy-parser.git`  
 `cd jeopardy-parser`  
-`chmod +x download.sh`  
-`chmod +x parser.py`  
+`chmod u+x download.sh`  
+`chmod u+x parser.py`  
 Run the download script and parser: `./download.sh && ./parser.py`)  
 
 The "real" running time of the parsing script (i.e. `(time ./parser.py) 2>&1 | grep real`) should not be more than 30 minutes on a decent machine. I know even that is quite a lot, but there are **a lot** of clues to go through. With [FTS3][2] enabled, the resulting database is sized at around 70M.
