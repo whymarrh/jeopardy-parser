@@ -17,11 +17,11 @@ def main():
     rows = rows.fetchall()
     # some games were skipped over
     if len(rows) > 0:
-      # output the game number
+      # the game number
       meta = "#%d" % gid
       # pick a random clue from this game
       row = randrange(0, len(rows))
-      # output
+      # output all the things
       print meta.rjust(5), " -> ".join(str(e) for e in rows[row])
 
 if __name__ == "__main__":
