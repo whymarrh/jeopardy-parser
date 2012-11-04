@@ -2,5 +2,5 @@
 *.db
 *.bak
 *.log
-*.pyo
+*.py[co]
 j-archive
