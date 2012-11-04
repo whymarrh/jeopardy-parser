@@ -47,7 +47,7 @@ def parse_clue(clue, category):
   # decent number of clues due to some sort of Unicode
   # issue. regardless, it helps to unescape all the things
   category = category.decode("string-escape")
-  value = clue.find("td", class_ = re.compile("clue_value")).string
+  value = clue.find("td", class_ = re.compile("clue_value")).string.lstrip("D: $")
   clue_ = clue.find("td", class_ = "clue_text").get_text().decode("string-escape")
   answer = BeautifulSoup(clue.find("div", onmouseover = True).get("onmouseover"), "lxml")
   answer = answer.find("em", class_ = "correct_response").get_text().decode("string-escape")
@@ -107,7 +107,7 @@ def parse_game(filehandle, sql, game_id):
     answer = BeautifulSoup(r.find("div", onmouseover = True).get("onmouseover"), "lxml")
     answer = answer.find("em").get_text().decode("string-escape")
     # "nil" indicates no preset value for a clue
-    clue = [game_id, airdate, 3, category, "nil", clue_, answer]
+    clue = [game_id, airdate, 3, category, False, clue_, answer]
     if not DEBUGGING:
       db_insert(sql, clue)
     else:
@@ -128,3 +128,4 @@ def main():
 
 if __name__ == "__main__":
   main()
+  sys.exit(0)
