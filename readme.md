@@ -2,7 +2,7 @@
 
 `parser.py` extracts Jeopardy! clues from the [J! Archive][1] website and dumps them into a SQLite database for use elsewhere. No particular application is intended, but a fair number of clues are skipped over when parsing. Any application requiring the complete set of clues will not find it here.
 
-`tests.py` spits out 10 random clues from various games. Manually comparing these clues to the J! Archive website is a simple way to verify that the clues are being matched to the proper category, round, value, game, etc.
+`tests.py` outputs a random clue from each of 10 random games. Manually comparing these clues to the J! Archive website is a simple way to verify that the clues are being matched to the proper category, round, value, game, etc.
 
 # Getting started
 
@@ -12,11 +12,11 @@ Clone the repo: `git clone git://github.com/whymarrh/jeopardy-parser.git`
 `chmod u+x parser.py`  
 Run the download script and parser: `./download.sh && ./parser.py`)  
 
-The "real" running time of the parsing script (i.e. `(time ./parser.py) 2>&1 | grep real`) should not be more than 160 minutes on a decent machine. I know even that is quite a lot, but there are **a lot** of clues to go through. The resulting database is ~30M.
+The "real" running time of the parsing script (i.e. `(time ./parser.py) 2>&1 | grep real`) should not be more than 160 minutes on a decent machine. While that is quite a lot, know that there are **a lot** of clues to go through. The resulting database is ~30M.
 
 # Regarding the initial download
 
-The download script does not mirror the entire site, it simply gets the game pages. Also note that no media files are downloaded (e.g. pictures) and the parser does not account for media clues. The complete download of the pages (at the time of writing) is approx. 295M, and can take up to [6.5 hours][2] (1s per page, plus a 5s wait between downloads, 3970 times).
+The download script does not mirror the entire site, it simply gets the game pages. Also note that no media files are downloaded (e.g. pictures, or audio files) and the parser does not account for media clues. The complete download of the pages (at the time of writing) is approx. 295M, and can take up to [6.5 hours][2] (1s per page, plus a 5s wait between downloads, 3970 times).
 
 # Querying the database
 
