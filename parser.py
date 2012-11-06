@@ -26,7 +26,7 @@ def create_db():
     sql = sqlite3.connect(SQLITE3_DB_NAME)
     sql.execute("CREATE TABLE airdates(game INTEGER PRIMARY KEY, airdate TEXT);")
     sql.execute("CREATE TABLE documents(id INTEGER PRIMARY KEY AUTOINCREMENT, clue TEXT, answer TEXT);")
-    sql.execute("CREATE TABLE categories(id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT UNIQUE);")
+    sql.execute("CREATE TABLE categories(id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT);") # the categories should really be unique, but that requires extra work when inserting
     sql.execute("CREATE TABLE clues(id INTEGER PRIMARY KEY AUTOINCREMENT, game INTEGER, round INTEGER, value INTEGER, FOREIGN KEY(id) REFERENCES documents(id), FOREIGN KEY(game) REFERENCES airdates(game));")
     sql.execute("CREATE TABLE classifications(clueid INTEGER, catid INTEGER, FOREIGN KEY(clueid) REFERENCES clues(id), FOREIGN KEY(catid) REFERENCES categories(id));")
     return sql
@@ -37,18 +37,12 @@ def create_db():
 def db_insert(sql, clue):
   """ Inserts the given clue into the database. """
   # where clue = [game, airdate, round, category, value, clue, answer]
-  # note that value = False if round == 3
+  # note that at this point, value = False if round == 3
   sql.execute("INSERT OR IGNORE INTO airdates VALUES(?,?);", tuple(clue[:2]))
-  sql.execute("INSERT OR IGNORE INTO categories(category) VALUES(?);", tuple([clue[3]]))
-  sql.execute("INSERT INTO documents(clue, answer) VALUES(?,?);", tuple(clue[5:7]))
+  catid = sql.execute("INSERT INTO categories(category) VALUES(?);", tuple([clue[3]])).lastrowid
+  clueid = sql.execute("INSERT INTO documents(clue, answer) VALUES(?,?);", tuple(clue[5:7])).lastrowid
   sql.execute("INSERT INTO clues(game, round, value) VALUES(?,?,?);", tuple([clue[0], clue[2], clue[4]]))
-  clueid = catid = None
-  for row in sql.execute("SELECT id from documents WHERE clue = ?", tuple([clue[5]])):
-    clueid = int(row[0])
-  for row in sql.execute("SELECT id FROM categories WHERE category = ?", tuple([clue[3]])):
-    catid = int(row[0])
   sql.execute("INSERT INTO classifications VALUES(?,?)", tuple([clueid, catid]))
-  sql.commit()
 
 def parse_clue(clue, category):
   """ Returns a list that models a clue in Jeopardy! """
@@ -134,6 +128,8 @@ def main():
         parse_game(f, sql, i)
     except IOError:
       continue
+  if sql:
+    sql.commit()
 
 if __name__ == "__main__":
   main()
