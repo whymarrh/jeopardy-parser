@@ -24,6 +24,9 @@ def create_db():
     return None
   try:
     sql = sqlite3.connect(SQLITE3_DB_NAME)
+    sql.execute("PRAGMA foreign_keys = ON;") # SQLite has foreign key support disabled by default
+    sql.execute("PRAGMA journal_mode = OFF;")
+    sql.execute("PRAGMA synchronous = OFF;")
     sql.execute("CREATE TABLE airdates(game INTEGER PRIMARY KEY, airdate TEXT);")
     sql.execute("CREATE TABLE documents(id INTEGER PRIMARY KEY AUTOINCREMENT, clue TEXT, answer TEXT);")
     sql.execute("CREATE TABLE categories(id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT);") # the categories should really be unique, but that requires extra work when inserting
