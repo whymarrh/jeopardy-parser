@@ -12,7 +12,7 @@ Clone the repo: `git clone git://github.com/whymarrh/jeopardy-parser.git`
 `chmod u+x parser.py`  
 Run the download script and parser: `./download.sh && ./parser.py`)  
 
-The "real" running time of the parsing script (i.e. `(time ./parser.py) 2>&1 | grep real`) should not be more than 160 minutes on a decent machine. While that is quite a lot, know that there are **a lot** of clues to go through. The resulting database is ~30M.
+The "real" running time of the parsing script (i.e. `(time ./parser.py) 2>&1 | grep real`) should not be more than 20 minutes on a decent machine. While that is quite a lot, know that there are **a lot** of clues to go through. The resulting database is ~35M.
 
 # Regarding the initial download
 
