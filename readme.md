@@ -15,7 +15,7 @@ The download script does not mirror the entire site, it simply gets the game pag
 Clone the repo: `git clone git://github.com/whymarrh/jeopardy-parser.git`  
 `cd jeopardy-parser`  
 `chmod u+x download.sh`  
-`chmod u+x tests.py`  
+`chmod u+x test.py`  
 `chmod u+x parser.py`  
 Run the download script, parser, and test: `./download.sh && ./time.sh && ./test.py`)  
 
