@@ -4,6 +4,8 @@ This, `parser.py`, is a script to extract Jeopardy! clues from the [J! Archive][
 
 To test the database, `test.py` outputs a random clue from each of 10 random games. Manually comparing these clues to the J! Archive website is a way to verify that the clues are being matched to the proper category, game, etc.
 
+Python 2.7.2 and SQLite 3.7.12 are required.
+
 # The initial download
 
 The download script does not mirror the entire site, it simply gets the game pages. Also note that no media files are downloaded (e.g. pictures or audio files) and the parser does not account for media clues. The complete download of the pages (at the time of writing) is approx. 295M, and can take up to 6.5 hours [(1s per page, plus a 5s wait between downloads, 3970 times)][2].
