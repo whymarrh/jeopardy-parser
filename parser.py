@@ -29,7 +29,7 @@ def create_db():
     sql.execute("PRAGMA synchronous = OFF;")
     sql.execute("CREATE TABLE airdates(game INTEGER PRIMARY KEY, airdate TEXT);")
     sql.execute("CREATE TABLE documents(id INTEGER PRIMARY KEY AUTOINCREMENT, clue TEXT, answer TEXT);")
-    sql.execute("CREATE TABLE categories(id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT);") # the categories should really be unique, but that requires extra work when inserting
+    sql.execute("CREATE TABLE categories(id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT UNIQUE);") # SQLite auto-creates an index for unique columns
     sql.execute("CREATE TABLE clues(id INTEGER PRIMARY KEY AUTOINCREMENT, game INTEGER, round INTEGER, value INTEGER, FOREIGN KEY(id) REFERENCES documents(id), FOREIGN KEY(game) REFERENCES airdates(game));")
     sql.execute("CREATE TABLE classifications(clueid INTEGER, catid INTEGER, FOREIGN KEY(clueid) REFERENCES clues(id), FOREIGN KEY(catid) REFERENCES categories(id));")
     return sql
@@ -40,9 +40,10 @@ def create_db():
 def db_insert(sql, clue):
   """ Inserts the given clue into the database. """
   # where clue = [game, airdate, round, category, value, clue, answer]
-  # note that at this point, value = False if round == 3
+  # note that at this point, value == False if round == 3
   sql.execute("INSERT OR IGNORE INTO airdates VALUES(?,?);", tuple(clue[:2]))
-  catid = sql.execute("INSERT INTO categories(category) VALUES(?);", tuple([clue[3]])).lastrowid
+  sql.execute("INSERT OR IGNORE INTO categories(category) VALUES(?);", (clue[3], ))
+  catid = sql.execute("SELECT id FROM categories WHERE category = ?;", (clue[3], )).fetchone()[0] # there will only be one row
   clueid = sql.execute("INSERT INTO documents(clue, answer) VALUES(?,?);", tuple(clue[5:7])).lastrowid
   sql.execute("INSERT INTO clues(game, round, value) VALUES(?,?,?);", tuple([clue[0], clue[2], clue[4]]))
   sql.execute("INSERT INTO classifications VALUES(?,?)", tuple([clueid, catid]))
@@ -112,7 +113,7 @@ def parse_game(filehandle, sql, game_id):
     clue_ = r.find("td", class_ = "clue_text").get_text().decode("string-escape")
     answer = BeautifulSoup(r.find("div", onmouseover = True).get("onmouseover"), "lxml")
     answer = answer.find("em").get_text().decode("string-escape")
-    # "nil" indicates no preset value for a clue
+    # False indicates no preset value for a clue
     clue = [game_id, airdate, 3, category, False, clue_, answer]
     if not DEBUGGING:
       db_insert(sql, clue)

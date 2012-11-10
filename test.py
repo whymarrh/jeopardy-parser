@@ -9,11 +9,11 @@ def main():
   """ Ouputs a random clue (with game ID) from 10 random games for manual verification. """
   sql = sqlite3.connect(SQLITE3_DB_NAME)
   # output the format for reference
-  print "GID".rjust(5), "R -> Category -> Clue text -> Answer"
-  # list of random game ids
+  print "GID".rjust(5), "Category -> Clue -> Answer"
+  # get a list of random game ids
   gids = [randint(1, NUMBER_OF_GAMES) for i in xrange(10)]
   for gid in gids:
-    rows = sql.execute("SELECT round, category, clue, answer FROM clues INNER JOIN documents ON clues.id = documents.id LEFT JOIN classifications ON classifications.clueid = clues.id LEFT JOIN categories ON classifications.catid = categories.id WHERE game = ?;", (gid, ))
+    rows = sql.execute("SELECT category, clue, answer FROM clues JOIN documents ON clues.id = documents.id JOIN classifications ON classifications.clueid = clues.id JOIN categories ON classifications.catid = categories.id WHERE game = ?;", (gid, ))
     rows = rows.fetchall()
     # some games were skipped over
     if len(rows) > 0:
