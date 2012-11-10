@@ -2,7 +2,7 @@
 
 This, `parser.py`, is a script to extract Jeopardy! clues from the [J! Archive][1] website and dump them into a SQLite database for use elsewhere. No particular application is intended, but a fair number of clues are skipped over when parsing, and any application requiring the complete set of clues will not find it here.
 
-To test the database, `test.py` outputs a random clue from each of 10 random games. Manually comparing these clues to the J! Archive website is a way to verify that the clues are being matched to the proper category, game, etc.
+To test the database, `test.py` outputs a single random clue from each of 10 random games. Manually comparing these clues to the J! Archive website is a way to verify that the clues are being matched to the proper category, game, etc.
 
 Python 2.7.2 and SQLite 3.7.12 are required.
 
