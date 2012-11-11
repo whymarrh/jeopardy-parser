@@ -1,6 +1,6 @@
 # What is this
 
-This, `parser.py`, is a script to extract Jeopardy! clues from the [J! Archive][1] website and dump them into a SQLite database for use elsewhere. No particular application is intended, but a fair number of clues are skipped over when parsing, and any application requiring the complete set of clues will not find it here.
+This, `parser.py`, is a script to extract [Jeopardy!][4] clues from the [J! Archive][1] website and dump them into a SQLite database for use elsewhere. No particular application is intended, but a fair number of clues are skipped over when parsing, and any application requiring the complete set of clues will not find it here.
 
 To test the database, `test.py` outputs a single random clue from each of 10 random games. Manually comparing these clues to the J! Archive website is a way to verify that the clues are being matched to the proper category, game, etc.
 
@@ -61,3 +61,4 @@ To get everything (although it is better to pick and choose what you're looking 
   [1]: http://j-archive.com/
   [2]:http://www.wolframalpha.com/input/?i=%281s+%2B+5s%29+*+3970
   [3]:http://www.wolframalpha.com/input/?i=%281s+%2B+5s%29+*+3970+%2B+20+minutes
+  [4]:http://www.jeopardy.com/
