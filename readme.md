@@ -10,6 +10,8 @@ Python 2.7.2 and SQLite 3.7.12 are required.
 
 The download script does not mirror the entire site, it simply gets the game pages. Also note that no media files are downloaded (e.g. pictures or audio files) and the parser does not account for media clues. The complete download of the pages (at the time of writing) is approx. 295M, and can take up to 6.5 hours [(1s per page, plus a 5s wait between downloads, 3970 times)][2].
 
+(Note that [Windows does not allow `?` characters in its filenames][5]. The downloaded files will be renamed to replace `?` with `_` and this will require a small modification of the parser on [line 129][6].)
+
 # Getting started
 
 Clone the repo: `git clone git://github.com/whymarrh/jeopardy-parser.git`  
@@ -62,3 +64,5 @@ To get everything (although it is better to pick and choose what you're looking 
   [2]:http://www.wolframalpha.com/input/?i=%281s+%2B+5s%29+*+3970
   [3]:http://www.wolframalpha.com/input/?i=%281s+%2B+5s%29+*+3970+%2B+20+minutes
   [4]:http://www.jeopardy.com/
+  [5]:http://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx#naming_conventions
+  [6]:https://github.com/whymarrh/jeopardy-parser/blob/master/parser.py#L129
