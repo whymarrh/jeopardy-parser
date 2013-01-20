@@ -51,7 +51,7 @@ To get the category that a clue is in, given a clue id:
 
 To get everything (although it is better to pick and choose what you're looking for):
 
-    SELECT clues.id, clues.game, airdate, round, value, clue, answer, category
+    SELECT clues.id, clues.game, airdate, round, value, category, clue, answer
     FROM clues
     JOIN airdates ON clues.game = airdates.game
     JOIN documents ON clues.id = documents.id
