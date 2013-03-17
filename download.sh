@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 folder=j-archive
 mkdir $folder; cd $folder
