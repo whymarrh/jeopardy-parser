@@ -11,7 +11,7 @@ def main(args):
 		print "The specified folder is not a directory."
 		sys.exit(1)
 	NUMBER_OF_FILES = len(os.listdir(args.dir))
-	print "Attempting to parse", NUMBER_OF_FILES, "files."
+	print "Parsing", NUMBER_OF_FILES, "files."
 	sql = None
 	if not args.stdout:
 		sql = sqlite3.connect(args.database)
@@ -20,7 +20,7 @@ def main(args):
 		sql.execute("CREATE TABLE documents(id INTEGER PRIMARY KEY AUTOINCREMENT, clue TEXT, answer TEXT);")
 		sql.execute("CREATE TABLE categories(id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT UNIQUE);")
 		sql.execute("CREATE TABLE clues(id INTEGER PRIMARY KEY AUTOINCREMENT, game INTEGER, round INTEGER, value INTEGER, FOREIGN KEY(id) REFERENCES documents(id), FOREIGN KEY(game) REFERENCES airdates(game));")
-		sql.execute("CREATE TABLE classifications(clueid INTEGER, catid INTEGER, FOREIGN KEY(clueid) REFERENCES clues(id), FOREIGN KEY(catid) REFERENCES categories(id));")
+		sql.execute("CREATE TABLE classifications(clue_id INTEGER, cat_id INTEGER, FOREIGN KEY(clueid) REFERENCES clues(id), FOREIGN KEY(catid) REFERENCES categories(id));")
 	for i in xrange(1, NUMBER_OF_FILES + 1):
 		with open(args.dir + os.sep + "showgame.php?game_id=" + str(i)) as f:
 			pgame(f, sql, i)
