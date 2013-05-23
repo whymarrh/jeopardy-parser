@@ -99,5 +99,5 @@ if __name__ == "__main__":
 	parser.add_argument("-d", dest = "dir", metavar = "FOLDER", help = "the directory containing the HTML game files", default = "j-archive")
 	parser.add_argument("-f", dest = "database", metavar = "FILENAME", help = "the filename for the SQLite database", default = "clues.db")
 	parser.add_argument("--stdout", help = "output the clues to stdout and not the database", action = "store_true")
-	parser.add_argument("--version", action = "version", version = "2013.05.16")
+	parser.add_argument("--version", action = "version", version = "2013.05.23")
 	main(parser.parse_args())
