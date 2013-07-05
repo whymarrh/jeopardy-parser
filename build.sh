@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 folder="j-archive"
 mkdir "$folder"; cd "$folder"
