@@ -1,5 +1,7 @@
-*.pdf
 *.db
+*.db-journal
+
+*.pdf
 *.bak
 *.py[co]
 
