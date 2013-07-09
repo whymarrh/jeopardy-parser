@@ -6,27 +6,51 @@ from bs4 import BeautifulSoup
 import argparse, re, os, sys, sqlite3
 
 def main(args):
-	"""Loop thru all the game files and parse them."""
+	"""Loop thru all the games and parse them."""
 	if not os.path.isdir(args.dir):
 		print "The specified folder is not a directory."
 		sys.exit(1)
 	NUMBER_OF_FILES = len(os.listdir(args.dir))
-	print "Parsing", NUMBER_OF_FILES, "files."
+	if args.num_of_files:
+		NUMBER_OF_FILES = args.num_of_files
+	print "Parsing", NUMBER_OF_FILES, "files"
 	sql = None
 	if not args.stdout:
 		sql = sqlite3.connect(args.database)
-		sql.execute("PRAGMA foreign_keys = ON;")
-		sql.execute("CREATE TABLE airdates(game INTEGER PRIMARY KEY, airdate TEXT);")
-		sql.execute("CREATE TABLE documents(id INTEGER PRIMARY KEY AUTOINCREMENT, clue TEXT, answer TEXT);")
-		sql.execute("CREATE TABLE categories(id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT UNIQUE);")
-		sql.execute("CREATE TABLE clues(id INTEGER PRIMARY KEY AUTOINCREMENT, game INTEGER, round INTEGER, value INTEGER, FOREIGN KEY(id) REFERENCES documents(id), FOREIGN KEY(game) REFERENCES airdates(game));")
-		sql.execute("CREATE TABLE classifications(clue_id INTEGER, category_id INTEGER, FOREIGN KEY(clue_id) REFERENCES clues(id), FOREIGN KEY(category_id) REFERENCES categories(id));")
+		sql.execute("""PRAGMA foreign_keys = ON;""")
+		sql.execute("""CREATE TABLE airdates(
+			game INTEGER PRIMARY KEY,
+			airdate TEXT
+		);""")
+		sql.execute("""CREATE TABLE documents(
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			clue TEXT,
+			answer TEXT
+		);""")
+		sql.execute("""CREATE TABLE categories(
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			category TEXT UNIQUE
+		);""")
+		sql.execute("""CREATE TABLE clues(
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			game INTEGER,
+			round INTEGER,
+			value INTEGER,
+			FOREIGN KEY(id) REFERENCES documents(id),
+			FOREIGN KEY(game) REFERENCES airdates(game)
+		);""")
+		sql.execute("""CREATE TABLE classifications(
+			clue_id INTEGER,
+			category_id INTEGER,
+			FOREIGN KEY(clue_id) REFERENCES clues(id),
+			FOREIGN KEY(category_id) REFERENCES categories(id)
+		);""")
 	for i in xrange(1, NUMBER_OF_FILES + 1):
 		with open(args.dir + os.sep + "showgame.php?game_id=" + str(i)) as f:
 			parse_game(f, sql, i)
 	if not args.stdout:
 		sql.commit()
-	print "All done."
+	print "All done"
 
 def parse_game(f, sql, gid):
 	"""Parses an entire Jeopardy! game and extract individual clues."""
@@ -83,11 +107,15 @@ def parse_round(bsoup, sql, rnd, gid, airdate):
 
 def insert(sql, clue):
 	"""Inserts the given clue into the database."""
+	# clue is [game, airdate, round, category, value, clue, answer]
+	# note that at this point, clue[4] is False if round is 3
+	if "\\\'" in clue[6]:
+		clue[6] = clue[6].replace("\\\'", "'")
+	if "\\\"" in clue[6]:
+		clue[6] = clue[6].replace("\\\"", "\"")
 	if not sql:
 		print clue
 		return
-	# where clue = [game, airdate, round, category, value, clue, answer]
-	# note that at this point, value is False if round is 3
 	sql.execute("INSERT OR IGNORE INTO airdates VALUES(?, ?);", (clue[0], clue[1], ))
 	sql.execute("INSERT OR IGNORE INTO categories(category) VALUES(?);", (clue[3], ))
 	category_id = sql.execute("SELECT id FROM categories WHERE category = ?;", (clue[3], )).fetchone()[0]
@@ -96,10 +124,11 @@ def insert(sql, clue):
 	sql.execute("INSERT INTO classifications VALUES(?, ?)", (clue_id, category_id, ))
 
 if __name__ == "__main__":
-	parser = argparse.ArgumentParser(description = "Parse game files from the J! Archive website.", usage = "%(prog)s [options]", add_help = False)
-	parser.add_argument("--help", action = "help", help = "show this help message and exit")
-	parser.add_argument("-d", dest = "dir", metavar = "FOLDER", help = "the directory containing the HTML game files", default = "j-archive")
-	parser.add_argument("-f", dest = "database", metavar = "FILENAME", help = "the filename for the SQLite database", default = "clues.db")
+	parser = argparse.ArgumentParser(description = "Parse games from the J! Archive website.", usage = "%(prog)s [options]", add_help = False)
+	parser.add_argument("-d", dest = "dir", metavar = "<folder>", help = "the directory containing the game files", default = "j-archive")
+	parser.add_argument("-n", dest = "num_of_files", metavar = "<num>", help = "the number of files to parse", type = int)
+	parser.add_argument("-f", dest = "database", metavar = "<filename>", help = "the filename for the SQLite database", default = "clues.db")
 	parser.add_argument("--stdout", help = "output the clues to stdout and not the database", action = "store_true")
-	parser.add_argument("--version", action = "version", version = "2013.06.01")
+	parser.add_argument("--help", action = "help", help = "show this help message and exit")
+	parser.add_argument("--version", action = "version", version = "2013.07.07")
 	main(parser.parse_args())
