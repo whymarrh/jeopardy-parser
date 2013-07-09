@@ -1,33 +1,51 @@
-# What is this
+Jeopardy parser
+===============
 
-A script to extract [Jeopardy!][4] clues from the [J! Archive][1] website and dump them into a SQLite database for use elsewhere (no particular application is intended).
+What is this?
+-------------
 
-Python 2.7.2 and SQLite 3.7.12 are tested.
+Extracts [Jeopardy!] clues from the [J! Archive] website and dumps them into a SQLite database for use elsewhere (no particular application is intended).
 
-# The initial download
+Python 2.7.5 and SQLite 3.7.12 are tested. Depends on BeautifulSoup 4 and the lxml parser.
 
-The download script does not mirror the entire site, it simply gets the game pages. Also note that no media files are downloaded (e.g. pictures or audio files) and the parser does not account for media clues. The complete download of the pages (at the time of writing) is ~300M, and can take ~6.5 hours [(1s per page, plus a 5s wait between downloads, 3970 times)][2].
+Quick start
+-----------
 
-(Note that [Windows does not allow `?` characters in its filenames][5]. The downloaded files will be renamed to replace `?` with `_` and this will require a small modification of the parser on [line 25][6].)
+```bash
+pip install beautifulsoup4
+pip install lxml
+git clone git://github.com/whymarrh/jeopardy-parser.git
+cd jeopardy-parser
+chmod +x build.sh
+./build.sh
+```
 
-# Getting started
+How long will all this take?
+----------------------------
 
-1. Clone the repo: `git clone git://github.com/whymarrh/jeopardy-parser.git`
-2. `cd jeopardy-parser`
-3. `chmod +x build.sh`
-4. Run `./build.sh` and wait
+The build script is doing two important things:
 
-The "real" running time of the parsing script (i.e. `(time ./parser.py) 2>&1 | grep real`) should be ~20 minutes on a decent machine. The resulting database is ~30M, and in total, the entire process (downloading and parsing) will require [~7 hours][3].
+1. Downloading the game files from the J! Archive website
+2. Parsing and inserting them into the database
 
-# Querying the database
+The first part takes ~6.5 hours, the second part should take ~20 minutes (on a 1.7 GHz Core i5 w/ 4 GB RAM). Yes, that's a rather long time -- please submit a pull request if you can think of a way to shorten it. In total, running the build script will require ~7 hours.
+
+As an aside: the complete download of the pages is ~300MB, and the resulting database file is ~30MB.
+
+As another aside: [Windows does not allow `?` characters in its filenames][1]. Thus, the downloaded files will have `?` replaced with `_` in their filesnames, and this will require a small modification of the parser on [line 49][2].)
+
+Querying the database
+---------------------
 
 The database is split into 5 tables:
 
-- `airdates` - airdates for the shows, indexed by game number.
-- `documents` - maps clue IDs to clue text and answers.
-- `categories` - the categories.
-- `clues` - clue IDs with metadata (game number, round, and value).
-- `classifications` - maps clue IDs to category IDs.
+| Table name        | What it holds                                          |
+| ----------------- | ------------------------------------------------------ |
+| `airdates`        | Airdates for the shows, indexed by game number         |
+| `documents`       | Mappings from clue IDs to clue text and answers        |
+| `categories`      | The categories                                         |
+| `clues`           | Clue IDs with metadata (game number, round, and value) |
+| `classifications` | Mappings from clue IDs to category IDs                 |
 
 To get all the clues along with their metadata:
 
@@ -56,9 +74,12 @@ To get everything (although it is better to pick and choose what you're looking 
     -- WHERE <expression>
     ;
 
-  [1]:http://j-archive.com/
-  [2]:http://www.wolframalpha.com/input/?i=%281s+%2B+5s%29+*+3970
-  [3]:http://www.wolframalpha.com/input/?i=%281s+%2B+5s%29+*+3970+%2B+20+minutes
-  [4]:http://www.jeopardy.com/
-  [5]:http://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx#naming_conventions
-  [6]:https://github.com/whymarrh/jeopardy-parser/blob/master/parser.py#L25
+License
+-------
+
+This software is released under the MIT License.
+
+  [Jeopardy!]:http://www.jeopardy.com/
+  [J! Archive]:http://j-archive.com/
+  [1]:http://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx#naming_conventions
+  [2]:https://github.com/whymarrh/jeopardy-parser/blob/master/parser.py#L49
