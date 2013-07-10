@@ -124,11 +124,37 @@ def insert(sql, clue):
 	sql.execute("INSERT INTO classifications VALUES(?, ?)", (clue_id, category_id, ))
 
 if __name__ == "__main__":
-	parser = argparse.ArgumentParser(description = "Parse games from the J! Archive website.", usage = "%(prog)s [options]", add_help = False)
-	parser.add_argument("-d", dest = "dir", metavar = "<folder>", help = "the directory containing the game files", default = "j-archive")
-	parser.add_argument("-n", dest = "num_of_files", metavar = "<num>", help = "the number of files to parse", type = int)
-	parser.add_argument("-f", dest = "database", metavar = "<filename>", help = "the filename for the SQLite database", default = "clues.db")
-	parser.add_argument("--stdout", help = "output the clues to stdout and not the database", action = "store_true")
+	parser = argparse.ArgumentParser(
+		description = "Parse games from the J! Archive website.",
+		add_help = False,
+		usage = "%(prog)s [options]"
+	)
+	parser.add_argument(
+		"-d", "--dir",
+		dest = "dir",
+		metavar = "<folder>",
+		help = "the directory containing the game files",
+		default = "j-archive"
+	)
+	parser.add_argument(
+		"-n", "--number-of-files",
+		dest = "num_of_files",
+		metavar = "<number>",
+		help = "the number of files to parse",
+		type = int
+	)
+	parser.add_argument(
+		"-f", "--filename",
+		dest = "database",
+		metavar = "<filename>",
+		help = "the filename for the SQLite database",
+		default = "clues.db"
+	)
+	parser.add_argument(
+		"--stdout",
+		help = "output the clues to stdout and not a database",
+		action = "store_true"
+	)
 	parser.add_argument("--help", action = "help", help = "show this help message and exit")
 	parser.add_argument("--version", action = "version", version = "2013.07.09")
 	main(parser.parse_args())
