@@ -49,30 +49,36 @@ The database is split into 5 tables:
 
 To get all the clues along with their metadata:
 
-    SELECT clues.id, game, round, value, clue, answer
-    FROM clues
-    JOIN documents ON clues.id = documents.id
-    -- WHERE <expression>
-    ;
+```sql
+SELECT clues.id, game, round, value, clue, answer
+FROM clues
+JOIN documents ON clues.id = documents.id
+-- WHERE <expression>
+;
+```
 
 To get the category that a clue is in, given a clue id:
 
-    SELECT clue_id, category
-    FROM classifications
-    JOIN categories ON cat_id = categories.id
-    -- WHERE <expression>
-    ;
+```sql
+SELECT clue_id, category
+FROM classifications
+JOIN categories ON cat_id = categories.id
+-- WHERE <expression>
+;
+```
 
 To get everything (although it is better to pick and choose what you're looking for):
 
-    SELECT clues.id, clues.game, airdate, round, value, category, clue, answer
-    FROM clues
-    JOIN airdates ON clues.game = airdates.game
-    JOIN documents ON clues.id = documents.id
-    JOIN classifications ON clues.id = classifications.clue_id
-    JOIN categories ON classifications.cat_id = categories.id
-    -- WHERE <expression>
-    ;
+```sql
+SELECT clues.id, clues.game, airdate, round, value, category, clue, answer
+FROM clues
+JOIN airdates ON clues.game = airdates.game
+JOIN documents ON clues.id = documents.id
+JOIN classifications ON clues.id = classifications.clue_id
+JOIN categories ON classifications.cat_id = categories.id
+-- WHERE <expression>
+;
+```
 
 License
 -------
