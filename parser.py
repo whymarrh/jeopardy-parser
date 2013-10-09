@@ -1,9 +1,11 @@
 #!/usr/bin/env python -OO
 # -*- coding: utf-8 -*-
 
+
 from __future__ import with_statement
-from bs4 import BeautifulSoup
+from glob import glob
 import argparse, re, os, sys, sqlite3
+from bs4 import BeautifulSoup
 
 def main(args):
 	"""Loop thru all the games and parse them."""
@@ -45,8 +47,8 @@ def main(args):
 			FOREIGN KEY(clue_id) REFERENCES clues(id),
 			FOREIGN KEY(category_id) REFERENCES categories(id)
 		);""")
-	for i in xrange(1, NUMBER_OF_FILES + 1):
-		with open(args.dir + os.sep + "showgame.php?game_id=" + str(i)) as f:
+	for i, file_name in enumerate(glob(os.path.join(args.dir, "*.html")), 1):
+		with open(os.path.abspath(file_name)) as f:
 			parse_game(f, sql, i)
 	if not args.stdout:
 		sql.commit()
