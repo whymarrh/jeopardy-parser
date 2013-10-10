@@ -16,9 +16,11 @@ pip install beautifulsoup4
 pip install lxml
 git clone git://github.com/whymarrh/jeopardy-parser.git
 cd jeopardy-parser
-chmod +x build.sh
-./build.sh
+python download.py
+python parser.py
 ```
+
+Thanks to [@knicholes](https://github.com/knicholes) for the Python download script.
 
 How long will all this take?
 ----------------------------
