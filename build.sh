@@ -7,7 +7,7 @@ then
 	mkdir "$folder"; cd "$folder"
 
 	echo "Downloading game files"
-	for i in {1..3970}
+	for i in {1..4321}
 	do
 		curl -vO "http://j-archive.com/showgame.php?game_id=$i"
 		sleep 5s # remember to be kind to the server
