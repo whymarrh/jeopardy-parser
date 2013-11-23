@@ -34,8 +34,6 @@ The first part takes ~6.5 hours, the second part should take ~20 minutes (on a 1
 
 As an aside: the complete download of the pages is ~300MB, and the resulting database file is ~30MB.
 
-As another aside: [Windows does not allow `?` characters in its filenames][1]. Thus, the downloaded files will have `?` replaced with `_` in their filesnames, and this will require a small modification of the parser on [line 49][2].)
-
 Querying the database
 ---------------------
 
