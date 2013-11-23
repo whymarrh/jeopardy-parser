@@ -9,8 +9,8 @@ then
 	echo "Downloading game files"
 	for i in {1..4321}
 	do
-		curl -vO "http://j-archive.com/showgame.php?game_id=$i"
-		sleep 5s # remember to be kind to the server
+		curl -v -o "$i.html" "http://j-archive.com/showgame.php?game_id=$i"
+		sleep 5s # Remember to be kind to the server
 	done
 fi
 
