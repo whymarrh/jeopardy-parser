@@ -77,7 +77,7 @@ FROM clues
 JOIN airdates ON clues.game = airdates.game
 JOIN documents ON clues.id = documents.id
 JOIN classifications ON clues.id = classifications.clue_id
-JOIN categories ON classifications.cat_id = categories.id
+JOIN categories ON classifications.category_id = categories.id
 -- WHERE <expression>
 ;
 ```
