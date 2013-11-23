@@ -64,7 +64,7 @@ To get the category that a clue is in, given a clue id:
 ```sql
 SELECT clue_id, category
 FROM classifications
-JOIN categories ON cat_id = categories.id
+JOIN categories ON category_id = categories.id
 -- WHERE <expression>
 ;
 ```
