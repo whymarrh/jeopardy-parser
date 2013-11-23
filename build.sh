@@ -12,6 +12,7 @@ then
 		curl -v -o "$i.html" "http://j-archive.com/showgame.php?game_id=$i"
 		sleep 5s # Remember to be kind to the server
 	done
+	cd .. # Leave the folder
 fi
 
 script="parser.py"
