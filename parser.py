@@ -1,7 +1,6 @@
 #!/usr/bin/env python -OO
 # -*- coding: utf-8 -*-
 
-
 from __future__ import with_statement
 from glob import glob
 import argparse, re, os, sys, sqlite3
