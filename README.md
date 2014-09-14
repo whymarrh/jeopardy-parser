@@ -22,7 +22,7 @@ python download.py
 python parser.py
 ```
 
-Thanks to [@knicholes](https://github.com/knicholes) for the Python download script.
+Thanks to [@knicholes](https://github.com/knicholes) for the Python download script. Please use the Python script instead of the Bash script to download files since it does not require manually updating the game numbers -- the Bash script exists solely because I like Bash.
 
 How long will all this take?
 ----------------------------
