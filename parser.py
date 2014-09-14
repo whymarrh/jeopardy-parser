@@ -89,13 +89,13 @@ def parse_round(bsoup, sql, rnd, gid, airdate):
 	# have to match them up with the clues later on
 	x = 0
 	for a in r.find_all("td", class_ = "clue"):
-		if not a.get_text().strip():
-			continue
-		value = a.find("td", class_ = re.compile("clue_value")).get_text().lstrip("D: $")
-		text = a.find("td", class_ = "clue_text").get_text()
-		answer = BeautifulSoup(a.find("div", onmouseover = True).get("onmouseover"), "lxml")
-		answer = answer.find("em", class_ = "correct_response").get_text()
-		insert(sql, [gid, airdate, rnd, categories[x], value, text, answer])
+		is_missing = True if not a.get_text().strip() else False
+		if not is_missing:
+			value = a.find("td", class_ = re.compile("clue_value")).get_text().lstrip("D: $")
+			text = a.find("td", class_ = "clue_text").get_text()
+			answer = BeautifulSoup(a.find("div", onmouseover = True).get("onmouseover"), "lxml")
+			answer = answer.find("em", class_ = "correct_response").get_text()
+			insert(sql, [gid, airdate, rnd, categories[x], value, text, answer])
 		# always update x, even if we skip
 		# a clue, as this keeps things in order. there
 		# are 6 categories, so once we reach the end,
@@ -160,5 +160,5 @@ if __name__ == "__main__":
 		action = "store_true"
 	)
 	parser.add_argument("--help", action = "help", help = "show this help message and exit")
-	parser.add_argument("--version", action = "version", version = "2013.07.09")
+	parser.add_argument("--version", action = "version", version = "2014.09.14")
 	main(parser.parse_args())
