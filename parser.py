@@ -101,8 +101,11 @@ def parse_round(bsoup, sql, rnd, gid, airdate):
 		# are 6 categories, so once we reach the end,
 		# loop back to the beginning category
 		#
+		# Using modulus is slower, e.g.:
+		#
 		# x += 1
 		# x %= 6
+		#
 		x = 0 if x == 5 else x + 1
 	return True
 
