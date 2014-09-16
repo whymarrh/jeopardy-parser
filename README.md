@@ -6,9 +6,10 @@ Quick note: this project does **not** use semantic versioning (`python parser.py
 What is this?
 -------------
 
-This is a Python script to extract [Jeopardy!] clues from the [J! Archive] website and dump them into a SQLite database for use elsewhere (no particular application is intended).
+This is a Python script to extract [Jeopardy!] clues from the [J! Archive] website and dump them into a SQLite database for use elsewhere (no particular application is intended). Python 2.7.* and SQLite 3.7.* on *nix have been tested and confirmed to work (requires BeautifulSoup 4 and the lxml parser).
 
-Python 2.7.5 and SQLite 3.7.13 on *nix have been tested and confirmed to work. Requires BeautifulSoup 4 and the lxml parser.
+  [Jeopardy!]:http://www.jeopardy.com/
+  [J! Archive]:http://j-archive.com/
 
 Quick start
 -----------
@@ -27,14 +28,14 @@ Thanks to [@knicholes](https://github.com/knicholes) for the Python download scr
 How long will all this take?
 ----------------------------
 
-The build script is doing two important things:
+There are two important steps:
 
 1. Downloading the game files from the J! Archive website
 2. Parsing and inserting them into the database
 
-The first part takes ~6.5 hours, the second part should take ~20 minutes (on a 1.7 GHz Core i5 w/ 4 GB RAM). Yes, that's a rather long time -- please submit a pull request if you can think of a way to shorten it. In total, running the build script will require ~7 hours.
+The first step takes ~6.5 hours, the second part should take ~20 minutes (on a 1.7 GHz Core i5 w/ 4 GB RAM). Yes, that's a rather long time -- please submit a pull request if you can think of a way to shorten it. In total, you're looking at ~7 hours.
 
-As an aside: the complete download of the pages is ~300MB, and the resulting database file is ~30MB.
+The complete download of the game files is ~300MB, and the resulting database file is ~30MB.
 
 Querying the database
 ---------------------
@@ -85,9 +86,4 @@ JOIN categories ON classifications.category_id = categories.id
 License
 -------
 
-This software is released under the MIT License.
-
-  [Jeopardy!]:http://www.jeopardy.com/
-  [J! Archive]:http://j-archive.com/
-  [1]:http://msdn.microsoft.com/en-us/library/windows/desktop/aa365247(v=vs.85).aspx#naming_conventions
-  [2]:https://github.com/whymarrh/jeopardy-parser/blob/master/parser.py#L49
+This software is released under the MIT License. See the [LICENSE.md](LICENSE.md) file for more information.
