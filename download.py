@@ -5,7 +5,7 @@ import itertools
 import os
 import urllib2
 import time
-import futures as futures
+import futures as futures # In Python 3 we can use "import concurrent.futures as futures"
 
 current_working_directory = os.path.dirname(os.path.abspath(__file__))
 archive_folder = os.path.join(current_working_directory, "j-archive")
