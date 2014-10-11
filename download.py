@@ -9,7 +9,7 @@ import futures as futures
 
 current_working_directory = os.path.dirname(os.path.abspath(__file__))
 archive_folder = os.path.join(current_working_directory, "j-archive")
-SECONDS_BETWEEN_REQUESTS = 3
+SECONDS_BETWEEN_REQUESTS = 5
 ERROR_MSG = "ERROR: No game"
 NUM_THREADS = 2 # Be conservative
 try:
