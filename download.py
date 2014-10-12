@@ -32,7 +32,7 @@ def create_archive_dir():
 
 def download_pages():
 	page = 1
-	with futures.ThreadPoolExecutor(max_workers=NUM_THREADS) as executor:
+	with futures.ThreadPoolExecutor(max_workers = NUM_THREADS) as executor:
 		# We submit NUM_THREADS tasks at a time since we don't know how many
 		# pages we will need to download in advance
 		while True:

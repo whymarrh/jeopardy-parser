@@ -15,9 +15,7 @@ Quick start
 -----------
 
 ```bash
-pip install beautifulsoup4
-pip install lxml
-pip install futures
+pip install -r requirements.txt
 git clone git://github.com/whymarrh/jeopardy-parser.git
 cd jeopardy-parser
 python download.py
