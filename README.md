@@ -16,8 +16,8 @@ Quick start
 
 ```bash
 git clone git://github.com/whymarrh/jeopardy-parser.git
-pip install -r requirements.txt
 cd jeopardy-parser
+pip install -r requirements.txt
 python download.py
 python parser.py
 ```
