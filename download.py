@@ -13,12 +13,12 @@ SECONDS_BETWEEN_REQUESTS = 5
 ERROR_MSG = "ERROR: No game"
 NUM_THREADS = 2 # Be conservative
 try:
-    import multiprocessing
-    # Since it's a lot of IO let's double # of actual cores
-    NUM_THREADS = multiprocessing.cpu_count() * 2
-    print 'Using {} threads'.format(NUM_THREADS)
+	import multiprocessing
+	# Since it's a lot of IO let's double # of actual cores
+	NUM_THREADS = multiprocessing.cpu_count() * 2
+	print 'Using {} threads'.format(NUM_THREADS)
 except (ImportError, NotImplementedError):
-    pass
+	pass
 
 def main():
 	create_archive_dir()
